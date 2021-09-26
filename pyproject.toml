@@ -1,0 +1,15 @@
+[tool.poetry]
+name = "modbusbackup"
+version = "0.1.0"
+description = "Backup connection between 2 unipi units using modbus"
+authors = ["Martijn Hemeryck <martijn.hemeryck@gmail.com>"]
+license = "MIT"
+
+[tool.poetry.dependencies]
+python = "^3.9"
+
+[tool.poetry.dev-dependencies]
+
+[build-system]
+requires = ["poetry-core>=1.0.0"]
+build-backend = "poetry.core.masonry.api"
