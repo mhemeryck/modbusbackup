@@ -7,6 +7,8 @@ license = "MIT"
 
 [tool.poetry.dependencies]
 python = "^3.9"
+pymodbus = {version = "^2.5.2", extras = ["repl"]}
+websockets = "^10.0"
 
 [tool.poetry.dev-dependencies]
 
