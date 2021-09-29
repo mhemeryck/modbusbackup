@@ -1,9 +1,12 @@
 import argparse
+import asyncio
+import json
 import logging
 
 import pymodbus.datastore
 import pymodbus.server.sync
 import pymodbus.transaction
+import websockets
 
 FORMAT = (
     "%(asctime)-15s %(threadName)-15s"
@@ -14,6 +17,16 @@ logger = logging.getLogger()
 logger.setLevel(logging.DEBUG)
 
 
+async def _ws_trigger(address: int, value: int, websocket_uri="ws://localhost/ws"):
+    logger.info(f"trigger for address {address} value {value}")
+    # TODO: address mapping
+    # TODO: Check current state in order to toggle
+    async with websockets.connect(websocket_uri) as websocket:
+        await websocket.send(
+            json.dumps({"cmd": "set", "dev": "relay", "circuit": "2_16", "value": 1})
+        )
+
+
 class CallbackDataBlock(pymodbus.datastore.ModbusSparseDataBlock):
     """callbacks on operation"""
 
@@ -22,6 +35,7 @@ class CallbackDataBlock(pymodbus.datastore.ModbusSparseDataBlock):
 
     def setValues(self, address, value):
         logger.info(f"Got {value} for {address}")
+        asyncio.run(_ws_trigger(address, value))
         super().setValues(address, value)
 
 
