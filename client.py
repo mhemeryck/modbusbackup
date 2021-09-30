@@ -1,8 +1,10 @@
+import asyncio
 import json
 import logging
 
 import pymodbus.client.asynchronous
 import pymodbus.client.asynchronous.serial
+import pymodbus.client.sync
 import websockets
 
 FORMAT = (
@@ -20,8 +22,22 @@ CIRCUIT_LIST = [f"{i+1}_{j+1}" for i, j in enumerate((4, 30, 30)) for j in range
 # Convert to map for easy access
 CIRCUIT_MAP = {e: k for k, e in enumerate(CIRCUIT_LIST)}
 
+_MODBUS_CLIENT = None
 
-async def _ws_process(modbus_client, payload) -> None:
+
+def _modbus_client() -> pymodbus.client.sync.ModbusSerialClient:
+    """Singleton modbus client"""
+    global _MODBUS_CLIENT
+    if _MODBUS_CLIENT is None:
+        _MODBUS_CLIENT = pymodbus.client.sync.ModbusSerialClient(
+            port="/dev/ttyNS0",
+            baudrate=19200,
+            method="rtu",
+        )
+    return _MODBUS_CLIENT
+
+
+async def _ws_process(payload) -> None:
     """Process incoming websocket payload, push to modbus RTU"""
     obj = json.loads(payload)[0]
     # Ignore analog I?O
@@ -41,13 +57,14 @@ async def _ws_process(modbus_client, payload) -> None:
         logger.debug(f"Could not find mapping address for {obj['circuit']}")
         return
 
+    # Blocking sync call
     logger.info(
         f"Writing {obj['value']} to address {address} for circuit {obj['circuit']}",
     )
-    await modbus_client.write_coil(address, obj["value"], unit=_UNIT)
+    _modbus_client().write_coil(address, obj["value"], unit=_UNIT)
 
 
-async def _ws_loop(modbus_client, websocket_uri="ws://localhost/ws") -> None:
+async def _ws_loop(websocket_uri="ws://localhost/ws") -> None:
     """Main loop polling incoming events from websockets"""
     logger.info(
         "Connecting to %s",
@@ -56,17 +73,8 @@ async def _ws_loop(modbus_client, websocket_uri="ws://localhost/ws") -> None:
     async with websockets.connect(websocket_uri) as websocket:
         while True:
             payload = await websocket.recv()
-            await _ws_process(modbus_client, payload)
+            await _ws_process(payload)
 
 
 if __name__ == "__main__":
-    loop, client = pymodbus.client.asynchronous.serial.AsyncModbusSerialClient(
-        pymodbus.client.asynchronous.schedulers.ASYNC_IO,
-        port="/dev/ttyNS0",
-        baudrate=19200,
-        method="rtu",
-    )
-    # Hack around the fact that the constructor does not take in the timeout arg
-    client._timeout = 10
-    loop.run_until_complete(_ws_loop(client.protocol))
-    loop.close()
+    asyncio.run(_ws_loop())
