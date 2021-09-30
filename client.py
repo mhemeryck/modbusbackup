@@ -5,8 +5,6 @@ import pymodbus.client.asynchronous
 import pymodbus.client.asynchronous.serial
 import websockets
 
-import common
-
 FORMAT = (
     "%(asctime)-15s %(threadName)-15s"
     " %(levelname)-8s %(module)-15s:%(lineno)-8s %(message)s"
@@ -16,6 +14,11 @@ logger = logging.getLogger()
 logger.setLevel(logging.INFO)
 
 _UNIT = 0x01
+
+# Dynamically generated list, i.e. [1_1, ... 1_4, 2_1, ..., 2_30, 3_1, ... 3_30]
+CIRCUIT_LIST = [f"{i+1}_{j+1}" for i, j in enumerate((4, 30, 30)) for j in range(j)]
+# Convert to map for easy access
+CIRCUIT_MAP = {e: k for k, e in enumerate(CIRCUIT_LIST)}
 
 
 async def _ws_process(modbus_client, payload) -> None:
@@ -28,9 +31,12 @@ async def _ws_process(modbus_client, payload) -> None:
         "Incoming message for websocket %s",
         obj,
     )
+    # Don't send any events related to trailing edges
+    if obj["value"] == 0:
+        return
 
     try:
-        address = common.CIRCUIT_MAP[obj["circuit"]]
+        address = CIRCUIT_MAP[obj["circuit"]]
     except KeyError:
         logger.debug(f"Could not find mapping address for {obj['circuit']}")
         return

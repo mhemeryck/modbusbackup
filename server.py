@@ -1,12 +1,10 @@
 import argparse
-import asyncio
-import json
 import logging
 
 import pymodbus.datastore
 import pymodbus.server.sync
 import pymodbus.transaction
-import websockets
+import requests
 
 FORMAT = (
     "%(asctime)-15s %(threadName)-15s"
@@ -17,14 +15,33 @@ logger = logging.getLogger()
 logger.setLevel(logging.DEBUG)
 
 
-async def _ws_trigger(address: int, value: int, websocket_uri="ws://localhost/ws"):
-    logger.info(f"trigger for address {address} value {value}")
-    # TODO: address mapping
-    # TODO: Check current state in order to toggle
-    async with websockets.connect(websocket_uri) as websocket:
-        await websocket.send(
-            json.dumps({"cmd": "set", "dev": "relay", "circuit": "2_16", "value": 1})
-        )
+def _trigger(address: int, value: int, host="http://localhost") -> None:
+    """Process incoming event"""
+    # Only check for rising edges since we're dealing with lights
+    if value == 0:
+        return
+
+    # TODO: proper translation
+    try:
+        response = requests.get(f"{host}/json/relay/2_16")
+        response.raise_for_status()
+    except requests.exceptions.HTTPError as error:
+        logger.debug(f"Issue with API call: {error}")
+        return
+    try:
+        current = response.json()["data"]["value"]
+    except (KeyError, ValueError):
+        logger.debug("Error reading current state")
+        return
+
+    # Flip the bit from current by XOR
+    toggled = current ^ 0x1
+    try:
+        requests.post(f"{host}/json/relay/2_16", json={"value": str(toggled)})
+        response.raise_for_status()
+    except requests.exceptions.HTTPError as error:
+        logger.debug(f"Issue with API call: {error}")
+        return
 
 
 class CallbackDataBlock(pymodbus.datastore.ModbusSparseDataBlock):
@@ -35,7 +52,7 @@ class CallbackDataBlock(pymodbus.datastore.ModbusSparseDataBlock):
 
     def setValues(self, address, value):
         logger.info(f"Got {value} for {address}")
-        asyncio.run(_ws_trigger(address, value))
+        _trigger(address, value)
         super().setValues(address, value)
 
 
