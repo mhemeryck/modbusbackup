@@ -7,7 +7,9 @@ import pymodbus.server.sync
 import pymodbus.transaction
 import requests
 import requests.exceptions
+import yaml
 
+_CONFIG_FILE = "config.yaml"
 FORMAT = (
     "%(asctime)-15s %(threadName)-15s"
     " %(levelname)-8s %(module)-15s:%(lineno)-8s %(message)s"
@@ -17,6 +19,12 @@ logger = logging.getLogger()
 logger.setLevel(logging.DEBUG)
 
 _SESSION = None
+_INPUT_MAP = None
+
+# Dynamically generated list, i.e. [1_1, ... 1_4, 2_1, ..., 2_30, 3_1, ... 3_30]
+CIRCUIT_LIST = [f"{i+1}_{j+1}" for i, j in enumerate((4, 30, 30)) for j in range(j)]
+# Convert to map for easy access
+CIRCUIT_MAP = {e: k for k, e in enumerate(CIRCUIT_LIST)}
 
 
 def _session() -> requests.Session:
@@ -27,14 +35,32 @@ def _session() -> requests.Session:
     return _SESSION
 
 
+def _relay_for_address(address: int) -> typing.Union[str, None]:
+    global _INPUT_MAP
+    if _INPUT_MAP is None:
+        with open(_CONFIG_FILE) as fh:
+            m = yaml.safe_load(fh)
+            _INPUT_MAP = {entry["input"]: entry["output"] for entry in m}
+
+    input_address = CIRCUIT_MAP.get(address)
+    if not input_address:
+        logger.debug(f"Could not find input for address {address}")
+        return
+
+    return _INPUT_MAP.get(input_address)
+
+
 def _trigger(address: int, value: bool, host="http://localhost") -> None:
     """Process incoming event"""
     # Only check for rising edges since we're dealing with lights
     if not value:
         return
 
-    # TODO: proper address translation
-    relay = "2_16"
+    relay = _relay_for_address(address)
+    if not relay:
+        logger.debug(f"Could not find relay for address {address}")
+        return
+
     try:
         response = _session().get(f"{host}/json/relay/{relay}")
         response.raise_for_status()
