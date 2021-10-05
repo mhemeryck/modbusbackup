@@ -24,7 +24,7 @@ _INPUT_MAP = None
 # Dynamically generated list, i.e. [1_1, ... 1_4, 2_1, ..., 2_30, 3_1, ... 3_30]
 CIRCUIT_LIST = [f"{i+1}_{j+1}" for i, j in enumerate((4, 30, 30)) for j in range(j)]
 # Convert to map for easy access
-CIRCUIT_MAP = {e: k for k, e in enumerate(CIRCUIT_LIST)}
+CIRCUIT_MAP = {k: e for k, e in enumerate(CIRCUIT_LIST)}
 
 
 def _session() -> requests.Session:
@@ -42,7 +42,8 @@ def _relay_for_address(address: int) -> typing.Union[str, None]:
             m = yaml.safe_load(fh)
             _INPUT_MAP = {entry["input"]: entry["output"] for entry in m}
 
-    input_address = CIRCUIT_MAP.get(address)
+    # Decrement address by one to make it zero-based
+    input_address = CIRCUIT_MAP.get(address - 1)
     if not input_address:
         logger.debug(f"Could not find input for address {address}")
         return
