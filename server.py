@@ -9,7 +9,6 @@ import requests
 import requests.exceptions
 import yaml
 
-_CONFIG_FILE = "config.yaml"
 FORMAT = (
     "%(asctime)-15s %(threadName)-15s"
     " %(levelname)-8s %(module)-15s:%(lineno)-8s %(message)s"
@@ -19,12 +18,18 @@ logger = logging.getLogger()
 logger.setLevel(logging.DEBUG)
 
 _SESSION = None
-_INPUT_MAP = None
+_RELAY_MAP: typing.Dict[str, str] = {}
+_CONFIG_FILE = "config.yaml"
 
-# Dynamically generated list, i.e. [1_1, ... 1_4, 2_1, ..., 2_30, 3_1, ... 3_30]
-CIRCUIT_LIST = [f"{i+1}_{j+1}" for i, j in enumerate((4, 30, 30)) for j in range(j)]
-# Convert to map for easy access
-CIRCUIT_MAP = {k: e for k, e in enumerate(CIRCUIT_LIST)}
+
+def _relay_map() -> typing.Dict[str, str]:
+    """Read config file and create a map between the index and the output"""
+    global _RELAY_MAP
+    if not _RELAY_MAP:
+        with open(_CONFIG_FILE) as fh:
+            m = yaml.safe_load(fh)
+            _RELAY_MAP = {entry["index"]: entry["output"] for entry in m}
+    return _RELAY_MAP
 
 
 def _session() -> requests.Session:
@@ -35,30 +40,16 @@ def _session() -> requests.Session:
     return _SESSION
 
 
-def _relay_for_address(address: int) -> typing.Union[str, None]:
-    global _INPUT_MAP
-    if _INPUT_MAP is None:
-        with open(_CONFIG_FILE) as fh:
-            m = yaml.safe_load(fh)
-            _INPUT_MAP = {entry["input"]: entry["output"] for entry in m}
-
-    # Decrement address by one to make it zero-based
-    input_address = CIRCUIT_MAP.get(address - 1)
-    if not input_address:
-        logger.debug(f"Could not find input for address {address}")
-        return
-
-    return _INPUT_MAP.get(input_address)
-
-
 def _trigger(address: int, value: bool, host="http://localhost") -> None:
     """Process incoming event"""
     # Only check for rising edges since we're dealing with lights
     if not value:
         return
 
-    relay = _relay_for_address(address)
-    if not relay:
+    # Convert address to zero-based address
+    try:
+        relay = _relay_map()[address - 1]
+    except KeyError:
         logger.debug(f"Could not find relay for address {address}")
         return
 
@@ -96,7 +87,11 @@ class CallbackDataBlock(pymodbus.datastore.ModbusSparseDataBlock):
         super().setValues(address, values)
 
 
-def run_server(port="/dev/ttyNS0", timeout=0.005, baudrate=19200):
+def run_server(
+    port: str = "/dev/ttyNS0",
+    timeout: float = 0.005,
+    baudrate: int = 19200,
+) -> None:
     block = CallbackDataBlock()
     store = pymodbus.datastore.ModbusSlaveContext(
         di=block, co=block, hr=block, ir=block
