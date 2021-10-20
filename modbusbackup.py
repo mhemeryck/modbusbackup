@@ -90,7 +90,7 @@ async def _ws_process(payload) -> None:
 async def _run_client(websocket_uri="ws://localhost/ws") -> None:
     """Main loop polling incoming events from websockets"""
     logger.info(f"Connecting to {websocket_uri}")
-    async with websockets.connect(websocket_uri) as websocket:
+    async with websockets.connect(websocket_uri) as websocket:  # type: ignore
         while True:
             payload = await websocket.recv()
             await _ws_process(payload)
@@ -111,10 +111,10 @@ def run_client(args: argparse.Namespace) -> None:
 # Server code
 
 _SESSION = None
-_RELAY_MAP: typing.Dict[str, str] = {}
+_RELAY_MAP: typing.Dict[int, str] = {}
 
 
-def _relay_map() -> typing.Dict[str, str]:
+def _relay_map() -> typing.Dict[int, str]:
     """Read config file and create a map between the index and the output"""
     global _RELAY_MAP
     if not _RELAY_MAP:
@@ -173,7 +173,7 @@ class CallbackDataBlock(pymodbus.datastore.ModbusSparseDataBlock):
     def __init__(self) -> None:
         super().__init__({k: k for k in range(64)})
 
-    def setValues(self, address: int, values: typing.Iterable) -> None:
+    def setValues(self, address: int, values: typing.List) -> None:
         logger.info(f"Got {values} for {address}")
         _trigger(address, values[0])
         super().setValues(address, values)
