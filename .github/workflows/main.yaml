@@ -24,7 +24,7 @@ jobs:
           python-version: "3.9"
       - name: Set up poetry
         run: |
-          python -m pip install pip wheel poetry
+          python -m pip install -U poetry
       - uses: actions/cache@v2
         with:
           path: ~/.cache/pypoetry/virtualenvs
