@@ -28,7 +28,8 @@ jobs:
           poetry install
       - name: Run flake8
         run: |
-          poetry run flake8 modbusbackup.py
+          source .venv/bin/activate
+          flake8 modbusbackup.py
       - name: Check imports
         run: |
           poetry run isort -c modbusbackup.py
