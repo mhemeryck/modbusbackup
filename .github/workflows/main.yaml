@@ -28,11 +28,13 @@ jobs:
           poetry install --no-interaction
       - name: Run flake8
         run: |
-          source .venv/bin/activate
-          flake8 modbusbackup.py
+          poetry run flake8 modbusbackup.py
       - name: Check imports
         run: |
           poetry run isort -c modbusbackup.py
       - name: Check black
         run: |
           poetry run black --check modbusbackup.py
+      - name: mypy static type check
+        run: |
+          poetry run mypy modbusbackup.py
