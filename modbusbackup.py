@@ -173,7 +173,7 @@ class CallbackDataBlock(pymodbus.datastore.ModbusSparseDataBlock):
     """callbacks on operation"""
 
     def __init__(self) -> None:
-        super().__init__({k: k for k in range(len(_relay_map().keys()))})
+        super().__init__({k: k for k in range(len(_relay_map().keys()) + 1)})
 
     def setValues(self, address: int, values: typing.List) -> None:
         logger.info(f"Got {values} for {address}")
