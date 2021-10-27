@@ -194,3 +194,7 @@
   input: "2_18"
   name: eetkamer stopcontact
   output: "3_27"
+- index: 61
+  input: "2_10"
+  name: kelder trappenhall beneden
+  output: "2_09"
