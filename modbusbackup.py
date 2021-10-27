@@ -19,7 +19,7 @@ FORMAT = (
 )
 logging.basicConfig(format=FORMAT)
 logger = logging.getLogger()
-logger.setLevel(logging.DEBUG)
+logger.setLevel(logging.INFO)
 
 # Global code
 
@@ -171,7 +171,7 @@ class CallbackDataBlock(pymodbus.datastore.ModbusSparseDataBlock):
     """callbacks on operation"""
 
     def __init__(self) -> None:
-        super().__init__({k: k for k in range(64)})
+        super().__init__({k: k for k in range(len(_relay_map().keys()))})
 
     def setValues(self, address: int, values: typing.List) -> None:
         logger.info(f"Got {values} for {address}")
@@ -206,7 +206,7 @@ def run_server(args: argparse.Namespace) -> None:
     )
 
 
-if __name__ == "__main__":
+def main() -> None:
     parser = argparse.ArgumentParser()
     parser.add_argument("--port", default="/dev/ttyNS0")
     parser.add_argument("--baudrate", type=int, default=19200)
@@ -226,3 +226,7 @@ if __name__ == "__main__":
     # Parse args and pass to function
     args = parser.parse_args()
     args.func(args)
+
+
+if __name__ == "__main__":
+    main()
