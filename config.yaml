@@ -14,10 +14,10 @@
   input: "2_07"
   name: praktijk centraal
   output: "2_04"
-- index: 4
-  input: "2_05"
-  name: kelder inkom buiten
-  output: "2_05"
+    #- index: 4
+    #  input: "2_05"
+    #  name: kelder inkom buiten
+    #  output: "2_05"
 - index: 5
   input: "2_08"
   name: archief
@@ -62,10 +62,10 @@
   input: "2_21"
   name: keuken spots
   output: "2_15"
-- index: 16
-  input: "2_11"
-  name: keukeneiland
-  output: "2_18"
+    #- index: 16
+    #  input: "2_11"
+    #  name: keukeneiland
+    #  output: "2_18"
 - index: 17
   input: "2_23"
   name: dampkap inbouw
@@ -86,18 +86,18 @@
   input: "3_06"
   name: living centraal
   output: "2_24"
-- index: 22
-  input: "3_04"
-  name: living wand
-  output: "2_25"
-- index: 23
-  input: "2_15"
-  name: living midden opbouwspots
-  output: "2_26"
-- index: 24
-  input: "2_19"
-  name: eetkamer schuifraam
-  output: "2_27"
+    #- index: 22
+    #  input: "3_04"
+    #  name: living wand
+    #  output: "2_25"
+    #- index: 23
+    #  input: "2_15"
+    #  name: living midden opbouwspots
+    #  output: "2_26"
+    #- index: 24
+    #  input: "2_19"
+    #  name: eetkamer schuifraam
+    #  output: "2_27"
 - index: 25
   input: "2_29"
   name: nachthall spots
@@ -110,10 +110,10 @@
   input: "2_28"
   name: nachthall
   output: "3_04"
-- index: 28
-  input: "2_30"
-  name: nachthall kast
-  output: "3_05"
+    #- index: 28
+    #  input: "2_30"
+    #  name: nachthall kast
+    #  output: "3_05"
 - index: 29
   input: "3_20"
   name: slaapkamer ouders spots
@@ -122,14 +122,14 @@
   input: "3_19"
   name: slaapkamer ouders centraal
   output: "3_07"
-- index: 31
-  input: "3_21"
-  name: slaapkamer ouders dressing
-  output: "3_09"
-- index: 32
-  input: "3_23"
-  name: slaapkamer ouders lavabo
-  output: "3_10"
+    #- index: 31
+    #  input: "3_21"
+    #  name: slaapkamer ouders dressing
+    #  output: "3_09"
+    #- index: 32
+    #  input: "3_23"
+    #  name: slaapkamer ouders lavabo
+    #  output: "3_10"
 - index: 33
   input: "3_18"
   name: slaapkamer victor
@@ -138,30 +138,30 @@
   input: "3_17"
   name: slaapkamer lucas
   output: "3_12"
-- index: 35
-  input: "3_12"
-  name: tuin links
-  output: "3_08"
-- index: 36
-  input: "3_14"
-  name: voortuin
-  output: "3_13"
-- index: 37
-  input: "3_15"
-  name: tuin rechts
-  output: "3_14"
-- index: 38
-  input: "2_13"
-  name: achtertuin berging
-  output: "3_15"
-- index: 39
-  input: "2_14"
-  name: achtertuin living
-  output: "3_16"
-- index: 40
-  input: "3_13"
-  name: luifel
-  output: "3_19"
+    #- index: 35
+    #  input: "3_12"
+    #  name: tuin links
+    #  output: "3_08"
+    #- index: 36
+    #  input: "3_14"
+    #  name: voortuin
+    #  output: "3_13"
+    #- index: 37
+    #  input: "3_15"
+    #  name: tuin rechts
+    #  output: "3_14"
+    #- index: 38
+    #  input: "2_13"
+    #  name: achtertuin berging
+    #  output: "3_15"
+    #- index: 39
+    #  input: "2_14"
+    #  name: achtertuin living
+    #  output: "3_16"
+    #- index: 40
+    #  input: "3_13"
+    #  name: luifel
+    #  output: "3_19"
 - index: 41
   input: "2_12"
   name: berging
