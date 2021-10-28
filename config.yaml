@@ -198,3 +198,7 @@
   input: "2_10"
   name: kelder trappenhall beneden
   output: "2_09"
+- index: 50
+  input: "3_02"
+  name: nachthall spots beneden
+  output: "3_01"
