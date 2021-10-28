@@ -142,7 +142,7 @@ def _trigger(address: int, value: bool, host="http://localhost") -> None:
 
     # Convert address to zero-based address
     try:
-        relay = _relay_map()[address - 1]
+        relay = _relay_map()[address]
     except KeyError:
         logger.debug(f"Could not find relay for address {address}")
         return
@@ -167,16 +167,18 @@ def _trigger(address: int, value: bool, host="http://localhost") -> None:
     except requests.exceptions.HTTPError as error:
         logger.debug(f"Issue with API call: {error}")
         return
+    else:
+        logger.info(f"Toggled relay {relay} to {toggled}")
 
 
 class CallbackDataBlock(pymodbus.datastore.ModbusSparseDataBlock):
     """callbacks on operation"""
 
     def __init__(self) -> None:
-        super().__init__({k: k for k in range(len(_relay_map().keys()) + 1)})
+        super().__init__({index: 0x0 for index in _relay_map().keys()})
 
     def setValues(self, address: int, values: typing.List) -> None:
-        logger.info(f"Got {values} for {address}")
+        logger.debug(f"Got {values} for {address}")
         _trigger(address, values[0])
         super().setValues(address, values)
 
@@ -184,7 +186,11 @@ class CallbackDataBlock(pymodbus.datastore.ModbusSparseDataBlock):
 def _run_server(port: str, timeout: float, baudrate: int) -> None:
     block = CallbackDataBlock()
     store = pymodbus.datastore.ModbusSlaveContext(
-        di=block, co=block, hr=block, ir=block
+        di=block,
+        co=block,
+        hr=block,
+        ir=block,
+        zero_mode=True,
     )
 
     context = pymodbus.datastore.ModbusServerContext(slaves=store, single=True)

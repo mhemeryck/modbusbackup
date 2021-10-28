@@ -1,76 +1,76 @@
-- index: 6
+- index: 0
   input: "2_03"
   name: kelder inkom inbouw
   output: "2_01"
-- index: 7
+- index: 1
   input: "2_04"
   name: kelder inkom opbouw
   output: "2_02"
-- index: 9
+- index: 2
   input: "2_06"
   name: praktijk inkom
   output: "2_03"
-- index: 10
+- index: 3
   input: "2_07"
   name: praktijk centraal
   output: "2_04"
-- index: 8
+- index: 4
   input: "2_05"
   name: kelder inkom buiten
   output: "2_05"
-- index: 11
+- index: 5
   input: "2_08"
   name: archief
   output: "2_06"
-- index: 12
+- index: 6
   input: "2_09"
   name: opslag
   output: "2_07"
-- index: 5
+- index: 7
   input: "2_02"
   name: kelder hall
   output: "2_08"
-- index: 13
+- index: 8
   input: "3_11"
   name: kelder trappenhall
   output: "2_09"
-- index: 4
+- index: 9
   input: "2_01"
   name: technische ruimte
   output: "2_10"
-- index: 43
+- index: 10
   input: "3_10"
   name: hall spots
   output: "2_11"
-- index: 41
+- index: 11
   input: "3_08"
   name: hall wand
   output: "2_12"
-- index: 34
+- index: 12
   input: "3_01"
   name: toilet gelijkvloers
   output: "2_13"
-- index: 42
+- index: 13
   input: "3_09"
   name: hall kast
   output: "2_14"
-- index: 29
+- index: 14
   input: "2_26"
   name: bureau
   output: "2_16"
-- index: 24
+- index: 15
   input: "2_21"
   name: keuken spots
   output: "2_15"
-- index: 14
+- index: 16
   input: "2_11"
   name: keukeneiland
   output: "2_18"
-- index: 26
+- index: 17
   input: "2_23"
   name: dampkap inbouw
   output: "2_19"
-- index: 20
+- index: 18
   input: "2_17"
   name: eetkamer spots
   output: "2_21"
@@ -78,123 +78,123 @@
   input: "2_16"
   name: eetkamer tafel
   output: "2_22"
-- index: 36
+- index: 20
   input: "3_03"
   name: living spots inbouw
   output: "2_23"
-- index: 39
+- index: 21
   input: "3_06"
   name: living centraal
   output: "2_24"
-- index: 37
+- index: 22
   input: "3_04"
   name: living wand
   output: "2_25"
-- index: 18
+- index: 23
   input: "2_15"
   name: living midden opbouwspots
   output: "2_26"
-- index: 22
+- index: 24
   input: "2_19"
   name: eetkamer schuifraam
   output: "2_27"
-- index: 32
+- index: 25
   input: "2_29"
   name: nachthall spots
   output: "3_01"
-- index: 49
+- index: 26
   input: "3_16"
   name: toilet verdieping
   output: "3_02"
-- index: 31
+- index: 27
   input: "2_28"
   name: nachthall
   output: "3_04"
-- index: 33
+- index: 28
   input: "2_30"
   name: nachthall kast
   output: "3_05"
-- index: 53
+- index: 29
   input: "3_20"
   name: slaapkamer ouders spots
   output: "3_06"
-- index: 52
+- index: 30
   input: "3_19"
   name: slaapkamer ouders centraal
   output: "3_07"
-- index: 54
+- index: 31
   input: "3_21"
   name: slaapkamer ouders dressing
   output: "3_09"
-- index: 56
+- index: 32
   input: "3_23"
   name: slaapkamer ouders lavabo
   output: "3_10"
-- index: 51
+- index: 33
   input: "3_18"
   name: slaapkamer victor
   output: "3_11"
-- index: 50
+- index: 34
   input: "3_17"
   name: slaapkamer lucas
   output: "3_12"
-- index: 45
+- index: 35
   input: "3_12"
   name: tuin links
   output: "3_08"
-- index: 47
+- index: 36
   input: "3_14"
   name: voortuin
   output: "3_13"
-- index: 48
+- index: 37
   input: "3_15"
   name: tuin rechts
   output: "3_14"
-- index: 16
+- index: 38
   input: "2_13"
   name: achtertuin berging
   output: "3_15"
-- index: 17
+- index: 39
   input: "2_14"
   name: achtertuin living
   output: "3_16"
-- index: 46
+- index: 40
   input: "3_13"
   name: luifel
   output: "3_19"
-- index: 15
+- index: 41
   input: "2_12"
   name: berging
   output: "3_22"
-- index: 57
+- index: 42
   input: "3_24"
   name: badkamer inkom
   output: "3_20"
-- index: 59
+- index: 43
   input: "3_26"
   name: badkamer douche
   output: "3_21"
-- index: 58
+- index: 44
   input: "3_25"
   name: badkamer bad
   output: "3_23"
-- index: 60
+- index: 45
   input: "3_27"
   name: badkamermeubel
   output: "3_24"
-- index: 38
+- index: 46
   input: "3_05"
   name: living stopcontact
   output: "3_27"
-- index: 55
+- index: 47
   input: "3_22"
   name: slaapkamer ouders stopcontact
   output: "3_28"
-- index: 21
+- index: 48
   input: "2_18"
   name: eetkamer stopcontact
   output: "3_27"
-- index: 61
+- index: 49
   input: "2_10"
   name: kelder trappenhall beneden
   output: "2_09"
