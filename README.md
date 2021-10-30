@@ -19,7 +19,7 @@ Example systemd unit file.
 
 Place this e.g. under `/etc/systemd/system/modbusbackupserver.service`
 
-```
+```
 [Unit]
 Description=modbusbackup
 After=network-online.target
@@ -69,3 +69,11 @@ Note:
 
 - Server mode is for the unipi module that will accept incoming modbus requests (modbus slaves).
 - Client mode is for the unipi module that will send out modbus message (modbus masters).
+
+A sample config file is included (mine, actually).
+It needs a list of configurations, each involving:
+
+- index: a unique number
+- input: the digital input
+- output: relay output to toggle
+- name: optional, just for readability
